@@ -8,3 +8,5 @@ KNACK_API_KEY: The Sister District Knack API key
 KNACK_API_ID: The Sister District Knack Application ID
 
 The module returns the HTTP return code and the error moessage or created object.
+
+Testing: run test-load-happy.py -h for details.  At the moment, and givne the name, this program only tests for basic succss and failure to load properly formatted JSON payloads into a Knack instance.
