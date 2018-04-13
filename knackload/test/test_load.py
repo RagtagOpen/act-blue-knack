@@ -20,6 +20,7 @@ def test_load_success():
     mock_credentials = ('mock_uri', 'mock_headers')
     mock_response = MockResponse(200, 'mock_text')
     knackload.knack_credentials = MagicMock(return_value=mock_credentials)
+    knackload.knack_object_id = MagicMock(return_value=1)
     requests.request = MagicMock(return_value=mock_response)
 
     test_json = '{"key": "value"}'
@@ -30,6 +31,7 @@ def test_load_success():
 def test_load_invalid_json():
     mock_credentials = ('mock_uri', 'mock_headers')
     knackload.knack_credentials = MagicMock(return_value=mock_credentials)
+    knackload.knack_object_id = MagicMock(return_value=1)
 
     test_json = '{"invalid: "json"}'
     status_code, text = knackload.load(test_json)
