@@ -30,4 +30,4 @@ def walk(path, dict):
     elif len(path) == 1:
         return dict.get(path[0])
     else:
-        return walk(path[1:], dict.get(path[0]))        
+        return walk(path[1:], dict.get(path[0]))
