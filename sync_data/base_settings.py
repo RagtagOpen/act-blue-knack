@@ -8,7 +8,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '#%0%7+^+33)9(g0lc!^w3w23@9$y@l7cu5)7=*adv(bfx_*#81')
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    ''
+)
 
 ALLOWED_HOSTS = ['arcane-ridge-14075.herokuapp.com', '127.0.0.1']
 
