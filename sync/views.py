@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 
 import base64
 import json
@@ -49,7 +49,9 @@ def walk(path, container):
 
 def auth(request):
     auth_header = request.META['HTTP_AUTHORIZATION']
-    encoded = auth_header.split(' ')[1]
-    username, password = base64.urlsafe_b64decode(encoded).split(':')
+    encoded = auth_header.split(' ')[1].encode('ascii')
+    username, password = base64.urlsafe_b64decode(encoded).split(b':')
+    username = username.decode('utf-8')
+    password = password.decode('utf-8')
     # TODO add encryption
     return username == settings.ACTBLUE_USERNAME and password == settings.ACTBLUE_PASSWORD
