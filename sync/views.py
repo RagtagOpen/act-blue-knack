@@ -15,7 +15,7 @@ def sync(request):
     if request.method == 'POST' and authorized:
         actblue_data = json.loads(request.body)
         knack_values = transform(actblue_data)
-        print "would have sent {} to knack".format(json.dumps(knack_values))
+        print("would have sent {} to knack".format(json.dumps(knack_values)))
         return HttpResponse('')
     else:
         return HttpResponseForbidden()
@@ -46,7 +46,7 @@ def walk(path, container):
 
 def auth(request):
     auth_header = request.META['HTTP_AUTHORIZATION']
-    encoded = str(auth_header.split(' ')[1]) # requires a str not unicode ¯\_(ツ)_/¯
+    encoded = auth_header.split(' ')[1]
     username, password = base64.urlsafe_b64decode(encoded).split(':')
     # TODO add encryption
     return  username == settings.ACTBLUE_USERNAME and password == settings.ACTBLUE_PASSWORD
