@@ -24,7 +24,13 @@ def sync(request):
 
 def transform(actblue_values):
     knack_values = {}
-    for k, v in settings.ACTBLUE_TO_KNACK_MAPPING.iteritems():
+    try:
+        # this works in Python 2
+        mapping = settings.ACTBLUE_TO_KNACK_MAPPING.iteritems()
+    except AttributeError:
+        # this works in Python 3, and returns an generator like iteritems in Python 2
+        mapping = settings.ACTBLUE_TO_KNACK_MAPPING.items()
+    for k, v in mapping:
         path = k.split('#')
         knack_values[v] = walk(path, actblue_values)
     return knack_values
