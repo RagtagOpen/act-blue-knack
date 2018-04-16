@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import base64
+import json
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-import base64
-import json
 
 @csrf_exempt
 def sync(request):
@@ -19,6 +20,7 @@ def sync(request):
         return HttpResponse('')
     else:
         return HttpResponseForbidden()
+
 
 def transform(actblue_values):
     knack_values = {}
@@ -44,9 +46,10 @@ def walk(path, container):
             new_container = container.get(path[0])
         return walk(path[1:], new_container)
 
+
 def auth(request):
     auth_header = request.META['HTTP_AUTHORIZATION']
     encoded = auth_header.split(' ')[1]
     username, password = base64.urlsafe_b64decode(encoded).split(':')
     # TODO add encryption
-    return  username == settings.ACTBLUE_USERNAME and password == settings.ACTBLUE_PASSWORD
+    return username == settings.ACTBLUE_USERNAME and password == settings.ACTBLUE_PASSWORD
