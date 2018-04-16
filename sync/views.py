@@ -15,7 +15,7 @@ def sync(request):
     if request.method == 'POST' and authorized:
         actblue_data = json.loads(request.body)
         knack_values = transform(actblue_data)
-        print 'would have sent {} to knack'.format(json.dumps(knack_values))
+        print "would have sent {} to knack".format(json.dumps(knack_values))
         return HttpResponse('')
     else:
         return HttpResponseForbidden()
