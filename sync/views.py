@@ -9,17 +9,32 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-
 @csrf_exempt
 def sync(request):
     authorized = auth(request)
     if request.method == 'POST' and authorized:
         actblue_data = json.loads(request.body)
+        ## This currently returns a list of dictionaries - unsure if we need to send one request per dictionary
         knack_values = transform(actblue_data)
         print("would have sent {} to knack".format(json.dumps(knack_values)))
         return HttpResponse('')
     else:
         return HttpResponseForbidden()
+
+
+def get_lineitems(actblue_values):
+    knack_lineitems = []
+    lineitems = actblue_values['lineitems']
+
+    knack_lineitem = {}
+    for lineitem in lineitems:
+        knack_lineitem['889'] = lineitem.get('amount')
+        knack_lineitem['931'] = lineitem.get('entityId')
+        knack_lineitem['934'] = lineitem.get('committeeName')
+        knack_lineitem['940'] = lineitem.get('paidAt')
+        knack_lineitems.append(knack_lineitem)
+
+    return knack_lineitems
 
 
 def transform(actblue_values):
@@ -33,8 +48,12 @@ def transform(actblue_values):
     for k, v in mapping:
         path = k.split('#')
         knack_values[v] = walk(path, actblue_values)
-    return knack_values
 
+    knack_lineitems = get_lineitems(actblue_values)
+    for knack_lineitem in knack_lineitems:
+        knack_lineitem.update(knack_values) # updates in-place!
+
+    return knack_lineitems
 
 def walk(path, container):
     if not container or isinstance(container, str):
