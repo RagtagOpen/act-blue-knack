@@ -14,15 +14,18 @@ def sync(request):
     authorized = auth(request)
     if request.method == 'POST' and authorized:
         actblue_data = json.loads(request.body)
-        # This currently returns a list of dictionaries
-        # unsure if we need to send one request per dictionary
         knack_values = transform(actblue_data)
-        print("would have sent {} to knack".format(json.dumps(knack_values)))
+
+        # This will not respond to ActBlue until we've sent every item to Knack.
+        # This _could_ cause timeouts, but might be OK?
+        # Will depend on how many line items we get.
+        for knack_value in knack_values:
+            print("would have sent {} to knack".format(json.dumps(knack_value)))
         return HttpResponse('')
     else:
         return HttpResponseForbidden()
 
-def get_lineitems(actblue_values):
+def get_lineitems(actblue_values, mapping):
     """
     Parse information we need from ActBlue line items.
 
@@ -30,11 +33,13 @@ def get_lineitems(actblue_values):
     """
     knack_lineitems = []
     lineitems = actblue_values['lineitems']
+    amountKey = mapping['lineitems#amount']
+    entityKey = mapping['lineitems#entityId']
 
     knack_lineitem = {}
     for lineitem in lineitems:
-        knack_lineitem['889'] = lineitem.get('amount')
-        knack_lineitem['935'] = lineitem.get('entityId')
+        knack_lineitem[amountKey] = lineitem.get('amount')
+        knack_lineitem[entityKey] = lineitem.get('entityId')
         knack_lineitems.append(knack_lineitem)
 
     return knack_lineitems
@@ -55,7 +60,7 @@ def transform(actblue_values):
         path = key.split('#')
         knack_values[value] = walk(path, actblue_values)
 
-    knack_lineitems = get_lineitems(actblue_values)
+    knack_lineitems = get_lineitems(actblue_values, mapping)
     for knack_lineitem in knack_lineitems:
         knack_lineitem.update(knack_values) # updates in-place!
 

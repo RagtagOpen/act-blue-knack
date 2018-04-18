@@ -16,4 +16,6 @@ ACTBLUE_TO_KNACK_MAPPING = {
     'donor#employerData#employer': '906',
     'donor#email': '908',
     'donor#phone': '909', # String, not an int
+    'lineitems#entityId': '935',
+    'lineitems#amount': '889',
 }
