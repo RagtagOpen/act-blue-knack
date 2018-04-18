@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
+
 @csrf_exempt
 def sync(request):
     authorized = auth(request)
@@ -19,11 +20,14 @@ def sync(request):
         # This will not respond to ActBlue until we've sent every item to Knack.
         # This _could_ cause timeouts, but might be OK?
         # Will depend on how many line items we get.
-        for knack_value in knack_values:
-            print("would have sent {} to knack".format(json.dumps(knack_value)))
+        if getattr(settings, 'DEBUG'):
+            for knack_value in knack_values:
+                print("would have sent {} to knack".format(
+                    json.dumps(knack_value)))
         return HttpResponse('')
     else:
         return HttpResponseForbidden()
+
 
 def get_lineitems(actblue_values, mapping):
     """
@@ -44,6 +48,7 @@ def get_lineitems(actblue_values, mapping):
 
     return knack_lineitems
 
+
 def transform(actblue_values):
     """
     Transform ActBlue's data into a list of Knack-keyed dictionaries,
@@ -62,9 +67,10 @@ def transform(actblue_values):
 
     knack_lineitems = get_lineitems(actblue_values, mapping)
     for knack_lineitem in knack_lineitems:
-        knack_lineitem.update(knack_values) # updates in-place!
+        knack_lineitem.update(knack_values)  # updates in-place!
 
     return knack_lineitems
+
 
 def walk(path, container):
     """
@@ -87,6 +93,7 @@ def walk(path, container):
         else:
             new_container = container.get(path[0])
         return walk(path[1:], new_container)
+
 
 def auth(request):
     auth_header = request.META['HTTP_AUTHORIZATION']
