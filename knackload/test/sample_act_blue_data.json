@@ -49,6 +49,15 @@
       "amount": "1000.0",
       "paidAt": "2018-01-24T21:43:44-05:00",
       "lineitemId": 123456789
+    },
+    {
+      "sequence": 0,
+      "entityId": 123456,
+      "fecId": null,
+      "committeeName": "Second Example Committee",
+      "amount": "10.0",
+      "paidAt": "2018-01-25T21:43:44-05:00",
+      "lineitemId": 123456
     }
   ]
 }

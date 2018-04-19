@@ -36,8 +36,8 @@ def get_lineitems(actblue_values, mapping):
     amountKey = mapping['lineitems#amount']
     entityKey = mapping['lineitems#entityId']
 
-    knack_lineitem = {}
     for lineitem in lineitems:
+        knack_lineitem = {}
         knack_lineitem[amountKey] = lineitem.get('amount')
         knack_lineitem[entityKey] = lineitem.get('entityId')
         knack_lineitems.append(knack_lineitem)
@@ -52,15 +52,17 @@ def transform(actblue_values):
     knack_values = {}
     try:
         # this works in Python 2
-        mapping = settings.ACTBLUE_TO_KNACK_MAPPING.iteritems()
+        scalar_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_SCALARS.iteritems()
+        array_items_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS
     except AttributeError:
         # this works in Python 3, and returns an generator like iteritems in Python 2
-        mapping = settings.ACTBLUE_TO_KNACK_MAPPING.items()
-    for key, value in mapping:
+        scalar_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_SCALARS.items()
+        array_items_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS
+    for key, value in scalar_mapping:
         path = key.split('#')
         knack_values[value] = walk(path, actblue_values)
 
-    knack_lineitems = get_lineitems(actblue_values, mapping)
+    knack_lineitems = get_lineitems(actblue_values, array_items_mapping)
     for knack_lineitem in knack_lineitems:
         knack_lineitem.update(knack_values) # updates in-place!
 
