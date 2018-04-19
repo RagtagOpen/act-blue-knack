@@ -65,7 +65,11 @@ def transform(actblue_values):
         array_items_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS
     for key, value in scalar_mapping:
         path = key.split('#')
-        knack_values[value] = walk(path, actblue_values)
+        if isinstance(value, list):
+            for v in value:
+                knack_values[v] = walk(path, actblue_values)
+        else:
+            knack_values[value] = walk(path, actblue_values)
 
     knack_lineitems = get_lineitems(actblue_values, array_items_mapping)
     for knack_lineitem in knack_lineitems:
