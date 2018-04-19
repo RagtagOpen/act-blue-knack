@@ -1,7 +1,5 @@
 from .base_settings import *
 
-DEBUG = True
-
 ACTBLUE_TO_KNACK_MAPPING_SCALARS = {
     'contribution#createdAt': 'field_888',
     'contribution#recurringDuration': 'field_890',
