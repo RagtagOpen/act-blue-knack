@@ -5,7 +5,7 @@ DEBUG = True
 ACTBLUE_TO_KNACK_MAPPING_SCALARS = {
     'contribution#createdAt': 'field_888',
     'contribution#recurringDuration': 'field_890',
-    'contribution#contributionForm': 'field_893',
+    'contribution#contributionForm': ['field_893', 'field_922'],
     'contribution#refcode': 'field_896',
     'donor#firstname': 'field_897',
     'donor#lastname': 'field_898',
