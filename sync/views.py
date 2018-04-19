@@ -4,6 +4,8 @@ from __future__ import print_function, unicode_literals
 import base64
 import json
 
+from knackload import knackload
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
@@ -20,7 +22,10 @@ def sync(request):
         # This _could_ cause timeouts, but might be OK?
         # Will depend on how many line items we get.
         for knack_value in knack_values:
-            print("would have sent {} to knack".format(json.dumps(knack_value)))
+            print("sent {} to knack".format(json.dumps(knack_value, indent=4)))
+            (return_status, result_string) = knackload.load( json.dumps(knack_value) )
+            result_data = json.loads(result_string)
+            print(json.dumps(result_data, indent=4))
         return HttpResponse('')
     else:
         return HttpResponseForbidden()
