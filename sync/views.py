@@ -4,6 +4,8 @@ from __future__ import print_function, unicode_literals
 import base64
 import json
 
+from knackload import knackload
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
@@ -20,10 +22,13 @@ def sync(request):
         # This will not respond to ActBlue until we've sent every item to Knack.
         # This _could_ cause timeouts, but might be OK?
         # Will depend on how many line items we get.
-        if getattr(settings, 'DEBUG'):
-            for knack_value in knack_values:
-                print("would have sent {} to knack".format(
-                    json.dumps(knack_value)))
+        for knack_value in knack_values:
+            if getattr(settings, 'DEBUG'):
+                print("sent {} to knack".format(json.dumps(knack_value, indent=4)))
+            (return_status, result_string) = knackload.load( json.dumps(knack_value) )
+            result_data = json.loads(result_string)
+            if getattr(settings, 'DEBUG'):
+                print(json.dumps(result_data, indent=4))
         return HttpResponse('')
     else:
         return HttpResponseForbidden()

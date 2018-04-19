@@ -21,6 +21,6 @@ ACTBLUE_TO_KNACK_MAPPING_SCALARS = {
 }
 
 ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS = {
-    'lineitems#entityId': '935',
-    'lineitems#amount': '889',
+    'lineitems#entityId': 'field_935',
+    'lineitems#amount': 'field_889',
 }
