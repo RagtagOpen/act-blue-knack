@@ -7,10 +7,11 @@ import json
 from knackload import knackload
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse
+from django.http import HttpResponseForbidden
+from django.http import HttpResponseServerError
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-
 
 @csrf_exempt
 def sync(request):
@@ -24,11 +25,18 @@ def sync(request):
         # Will depend on how many line items we get.
         for knack_value in knack_values:
             if getattr(settings, 'DEBUG'):
-                print("sent {} to knack".format(json.dumps(knack_value, indent=4)))
-            (return_status, result_string) = knackload.load( json.dumps(knack_value) )
-            result_data = json.loads(result_string)
-            if getattr(settings, 'DEBUG'):
-                print(json.dumps(result_data, indent=4))
+                print('sent {} to knack'.format(json.dumps(knack_value, indent=4)))
+
+            return_status, result_string = knackload.load(json.dumps(knack_value))
+
+            if return_status != 200:
+                print('Error: We failed to send {} to knack'.format(knack_value))
+                return HttpResponseServerError()
+            else:
+                result_data = json.loads(result_string)
+                if getattr(settings, 'DEBUG'):
+                    print(json.dumps(result_data, indent=4))
+
         return HttpResponse('')
     else:
         return HttpResponseForbidden()
