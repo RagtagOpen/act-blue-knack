@@ -10,11 +10,15 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.http import HttpResponseServerError
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def sync(request):
+    """
+    Entry point.  Receives a POST from ActBlue, transforms it, and POSTs it on to Knack
+
+    Returns a 200, 403, or 500 to ActBlue.
+    """
     authorized = auth(request)
     if request.method == 'POST' and authorized:
         actblue_data = json.loads(request.body)
@@ -50,13 +54,13 @@ def get_lineitems(actblue_values, mapping):
     """
     knack_lineitems = []
     lineitems = actblue_values['lineitems']
-    amountKey = mapping['lineitems#amount']
-    entityKey = mapping['lineitems#entityId']
+    amount_key = mapping['lineitems#amount']
+    entity_key = mapping['lineitems#entityId']
 
     for lineitem in lineitems:
         knack_lineitem = {}
-        knack_lineitem[amountKey] = lineitem.get('amount')
-        knack_lineitem[entityKey] = lineitem.get('entityId')
+        knack_lineitem[amount_key] = lineitem.get('amount')
+        knack_lineitem[entity_key] = lineitem.get('entityId')
         knack_lineitems.append(knack_lineitem)
 
     return knack_lineitems
@@ -79,8 +83,8 @@ def transform(actblue_values):
     for key, value in scalar_mapping:
         path = key.split('#')
         if isinstance(value, list):
-            for v in value:
-                knack_values[v] = walk(path, actblue_values)
+            for val in value:
+                knack_values[val] = walk(path, actblue_values)
         else:
             knack_values[value] = walk(path, actblue_values)
 
@@ -115,6 +119,11 @@ def walk(path, container):
 
 
 def auth(request):
+    """
+    Make sure an incoming request is authorized.
+
+    Returns a boolean.
+    """
     auth_header = request.META['HTTP_AUTHORIZATION']
     encoded = auth_header.split(' ')[1].encode('ascii')
     username, password = base64.urlsafe_b64decode(encoded).split(b':')
