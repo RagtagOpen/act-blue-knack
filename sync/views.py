@@ -12,6 +12,10 @@ from django.http import HttpResponseForbidden
 from django.http import HttpResponseServerError
 from django.views.decorators.csrf import csrf_exempt
 
+def log_debug(string):
+    if getattr(settings, 'DEBUG'):
+        print(string)
+
 @csrf_exempt
 def sync(request):
     """
@@ -28,18 +32,20 @@ def sync(request):
         # This _could_ cause timeouts, but might be OK?
         # Will depend on how many line items we get.
         for knack_value in knack_values:
-            if getattr(settings, 'DEBUG'):
-                print('sent {} to knack'.format(json.dumps(knack_value, indent=4)))
+            log_debug('sent {} to knack'.format(json.dumps(knack_value, indent=4)))
 
             return_status, result_string = knackload.load(json.dumps(knack_value))
 
             if return_status != 200:
-                print('Error: We failed to send {} to knack'.format(knack_value))
+                contribution_refcode = knack_value['field_638']
+                lineitem_entity_id = knack_value['field_684']
+                error_msg = 'Error: We failed to send refcode {}, lineitem {} to knack'
+                print(error_msg.format(contribution_refcode, lineitem_entity_id))
+                log_debug('Error: We failed to send ' + knack_value)
                 return HttpResponseServerError()
             else:
                 result_data = json.loads(result_string)
-                if getattr(settings, 'DEBUG'):
-                    print(json.dumps(result_data, indent=4))
+                log_debug(json.dumps(result_data, indent=4))
 
         return HttpResponse('')
     else:
