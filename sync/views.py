@@ -37,11 +37,14 @@ def sync(request):
             return_status, result_string = knackload.load(json.dumps(knack_value))
 
             if return_status != 200:
-                contribution_refcode = knack_value['field_638']
-                lineitem_entity_id = knack_value['field_684']
-                error_msg = 'Error: We failed to send refcode {}, lineitem {} to knack'
-                print(error_msg.format(contribution_refcode, lineitem_entity_id))
+                order_id = actblue_data['contribution']['orderNumber']
+                entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_SCALARS['lineitems#entityId']
+                lineitem_entity_id = knack_value[entity_id_key]
+
+                error_msg = 'Error: We failed to send order {}, lineitem {} to knack'
+                print(error_msg.format(order_id, lineitem_entity_id))
                 log_debug('Error: We failed to send ' + knack_value)
+
                 return HttpResponseServerError()
             else:
                 result_data = json.loads(result_string)
