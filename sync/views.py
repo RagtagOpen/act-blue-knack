@@ -43,7 +43,7 @@ def sync(request):
 
                 error_msg = 'Error: We failed to send order {}, lineitem {} to knack'
                 print(error_msg.format(order_id, lineitem_entity_id))
-                log_debug('Error: We failed to send ' + knack_value)
+                log_debug('Error: We failed to send {}'.format(json.dumps(knack_value, indent=4)))
 
                 return HttpResponseServerError()
             else:
