@@ -38,7 +38,7 @@ def sync(request):
 
             if return_status != 200:
                 order_id = actblue_data['contribution']['orderNumber']
-                entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_SCALARS['lineitems#entityId']
+                entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS['lineitems#entityId']
                 lineitem_entity_id = knack_value[entity_id_key]
 
                 error_msg = 'Error: We failed to send order {}, lineitem {} to knack'
