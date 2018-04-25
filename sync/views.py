@@ -33,13 +33,13 @@ def sync(request):
         # Will depend on how many line items we get.
         for knack_value in knack_values:
             log_debug('sent {} to knack'.format(json.dumps(knack_value, indent=4)))
+            order_id = actblue_data['contribution']['orderNumber']
+            entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS['lineitems#entityId']
+            lineitem_entity_id = knack_value[entity_id_key]
 
             return_status, result_string = knackload.load(json.dumps(knack_value))
 
             if return_status != 200:
-                order_id = actblue_data['contribution']['orderNumber']
-                entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS['lineitems#entityId']
-                lineitem_entity_id = knack_value[entity_id_key]
 
                 error_msg = 'Error: We failed to send order {}, lineitem {} to knack'
                 print(error_msg.format(order_id, lineitem_entity_id))
@@ -47,6 +47,8 @@ def sync(request):
 
                 return HttpResponseServerError()
             else:
+                success_msg = 'Success: We sent order {}, lineitem {} to knack'
+                print(success_msg.format(order_id, lineitem_entity_id))
                 result_data = json.loads(result_string)
                 log_debug(json.dumps(result_data, indent=4))
 
