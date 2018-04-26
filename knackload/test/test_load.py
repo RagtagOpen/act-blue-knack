@@ -9,6 +9,8 @@ from unittest.mock import MagicMock
 import requests
 import knackload
 
+KNACK_OBJECT_ID = 1000
+
 class MockResponse():
     """A mock response for Requests"""
     def __init__(self, status_code, text):
@@ -24,7 +26,7 @@ def test_load_success():
     requests.request = MagicMock(return_value=mock_response)
 
     test_json = '{"key": "value"}'
-    status_code, text = knackload.load(test_json)
+    status_code, text = knackload.load(test_json, KNACK_OBJECT_ID)
     assert status_code == 200
     assert text == 'mock_text'
 
@@ -34,6 +36,6 @@ def test_load_invalid_json():
     knackload.knack_object_id = MagicMock(return_value=1)
 
     test_json = '{"invalid: "json"}'
-    status_code, text = knackload.load(test_json)
+    status_code, text = knackload.load(test_json, KNACK_OBJECT_ID)
     assert status_code == 500
     assert text == 'Payload is invalid json'

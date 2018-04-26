@@ -27,6 +27,7 @@ def sync(request):
     if request.method == 'POST' and authorized:
         actblue_data = json.loads(request.body)
         knack_values = transform(actblue_data)
+        knack_object_id = settings.KNACK_OBJECT_ID
 
         # This will not respond to ActBlue until we've sent every item to Knack.
         # This _could_ cause timeouts, but might be OK?
@@ -37,7 +38,7 @@ def sync(request):
             entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS['lineitems#entityId']
             lineitem_entity_id = knack_value[entity_id_key]
 
-            return_status, result_string = knackload.load(json.dumps(knack_value))
+            return_status, result_string = knackload.load(json.dumps(knack_value), knack_object_id)
 
             if return_status != 200:
 
