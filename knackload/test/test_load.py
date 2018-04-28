@@ -9,7 +9,7 @@ from unittest.mock import MagicMock
 import requests
 import knackload
 
-KNACK_OBJECT_ID = 1000
+KNACK_OBJECT_ID = '1000'
 
 class MockResponse():
     """A mock response for Requests"""
