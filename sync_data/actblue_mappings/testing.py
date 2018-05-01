@@ -20,3 +20,5 @@ ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS = {
     'lineitems#entityId': 'field_935',
     'lineitems#amount': 'field_889',
 }
+
+KNACK_OBJECT_ID = '41'

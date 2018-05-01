@@ -28,13 +28,7 @@ def knack_credentials():
 
     return headers
 
-def knack_object_id():
-    """
-    Read the Knack object id from the local environment.
-    """
-    return os.environ['KNACK_OBJECT_ID']
-
-def load(payload):
+def load(payload, knack_object_id):
     """
     Read JSON as a string and POST it to the Knack database.
 
@@ -48,8 +42,7 @@ def load(payload):
     except ValueError:
         return 500, 'Payload is invalid json'
 
-    object_id  = knack_object_id()
-    uri = KNACK_URI.format(object_id)
+    uri = KNACK_URI.format(knack_object_id)
     response = requests.request("POST", uri, data=payload, headers=headers)
 
     return response.status_code, response.text
