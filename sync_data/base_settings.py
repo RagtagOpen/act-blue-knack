@@ -63,7 +63,7 @@ if os.environ.get('SENTRY_DSN'):
         'dsn': os.environ.get('SENTRY_DSN'),
     }
     if os.environ.get('SENTRY_ENVIRONMENT'):
-        RAVEN_CONFIG['environment'] = 'SENTRY_ENVIRONMENT'
+        RAVEN_CONFIG['environment'] = os.environ.get('SENTRY_ENVIRONMENT')
 
     if os.environ.get('HEROKU_SLUG_COMMIT'):
         RAVEN_CONFIG['release'] = os.environ.get('HEROKU_SLUG_COMMIT')
