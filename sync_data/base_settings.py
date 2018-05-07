@@ -1,5 +1,7 @@
 import os
 
+import raven
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'raven.contrib.django.raven_compat',
 ]
 
 MIDDLEWARE = [
@@ -54,3 +57,20 @@ USE_TZ = True
 # ActBlue credentials. DO NOT DEPLOY THIS WITHOUT SETTING ENV VARS
 ACTBLUE_USERNAME = os.environ.get('DJANGO_ACTBLUE_USERNAME', 'testuser')
 ACTBLUE_PASSWORD = os.environ.get('DJANGO_ACTBLUE_PASSWORD', 'testpassword')
+
+if os.environ.get('SENTRY_DSN'):
+    RAVEN_CONFIG = {
+        'dsn': os.environ.get('SENTRY_DSN'),
+    }
+    if os.environ.get('SENTRY_ENVIRONMENT'):
+        RAVEN_CONFIG['environment'] = 'SENTRY_ENVIRONMENT'
+
+    if os.environ.get('HEROKU_SLUG_COMMIT'):
+        RAVEN_CONFIG['release'] = os.environ.get('HEROKU_SLUG_COMMIT')
+    else:
+        try:
+            RAVEN_CONFIG['release'] = raven.fetch_git_sha(
+                os.path.abspath(os.pardir)
+            )
+        except raven.exceptions.InvalidGitRepository:
+            pass  # couldn't find the git repo
