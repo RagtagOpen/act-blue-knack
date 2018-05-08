@@ -19,6 +19,11 @@ ACTBLUE_TO_KNACK_MAPPING_SCALARS = {
 ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS = {
     'lineitems#entityId': 'field_684',
     'lineitems#amount': 'field_639',
+    'lineitems#committeeName': 'field_642',
 }
 
 KNACK_OBJECT_ID = '32'
+
+FIELD_PREFIXES = {
+    'field_643': 'https:/secure.actblue.com/donate/'
+}

@@ -1,6 +1,7 @@
 from .actblue_mappings.testing import (ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS,
                                        ACTBLUE_TO_KNACK_MAPPING_SCALARS,
-                                       KNACK_OBJECT_ID
+                                       KNACK_OBJECT_ID,
+                                       FIELD_PREFIXES
                                        )
 from .base_settings import *
 
