@@ -59,6 +59,8 @@ ACTBLUE_USERNAME = os.environ.get('DJANGO_ACTBLUE_USERNAME', 'testuser')
 ACTBLUE_PASSWORD = os.environ.get('DJANGO_ACTBLUE_PASSWORD', 'testpassword')
 
 if os.environ.get('SENTRY_DSN'):
+    SENTRY_CLIENT = 'sync_data.sentry_client.DjangoClient'
+
     RAVEN_CONFIG = {
         'dsn': os.environ.get('SENTRY_DSN'),
     }
