@@ -42,7 +42,7 @@ def sync(request):
 
             if return_status != 200:
                 logger.error('Knack Send Failed', extra={
-                    'payload': knack_value,
+                    'order': order_id,
                     'lineitem': lineitem_entity_id,
                     'status_code': return_status,
                 })
