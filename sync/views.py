@@ -68,11 +68,13 @@ def get_lineitems(actblue_values, mapping):
     lineitems = actblue_values['lineitems']
     amount_key = mapping['lineitems#amount']
     entity_key = mapping['lineitems#entityId']
+    committee_name = mapping['lineitems#committeeName']
 
     for lineitem in lineitems:
         knack_lineitem = {}
         knack_lineitem[amount_key] = lineitem.get('amount')
         knack_lineitem[entity_key] = lineitem.get('entityId')
+        knack_lineitem[committee_name] = lineitem.get('committeeName')
         knack_lineitems.append(knack_lineitem)
 
     return knack_lineitems
@@ -88,10 +90,12 @@ def transform(actblue_values):
         # this works in Python 2
         scalar_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_SCALARS.iteritems()
         array_items_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS
+        field_prefixes = settings.FIELD_PREFIXES.iteritems()
     except AttributeError:
         # this works in Python 3, and returns an generator like iteritems in Python 2
         scalar_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_SCALARS.items()
         array_items_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS
+        field_prefixes = settings.FIELD_PREFIXES.items()
     for key, value in scalar_mapping:
         path = key.split('#')
         if isinstance(value, list):
@@ -103,6 +107,11 @@ def transform(actblue_values):
     knack_lineitems = get_lineitems(actblue_values, array_items_mapping)
     for knack_lineitem in knack_lineitems:
         knack_lineitem.update(knack_values)  # updates in-place!
+        """
+        do string transformations
+        """
+        for fkey, fvalue in field_prefixes:
+            knack_lineitem[fkey] = fvalue + knack_lineitem[fkey]
 
     return knack_lineitems
 
