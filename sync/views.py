@@ -3,18 +3,16 @@ from __future__ import print_function, unicode_literals
 
 import base64
 import json
-
-from knackload import knackload
+import logging
 
 from django.conf import settings
-from django.http import HttpResponse
-from django.http import HttpResponseForbidden
-from django.http import HttpResponseServerError
+from django.http import (HttpResponse, HttpResponseForbidden,
+                         HttpResponseServerError)
 from django.views.decorators.csrf import csrf_exempt
+from knackload import knackload
 
-def log_debug(string):
-    if getattr(settings, 'DEBUG'):
-        print(string)
+logger = logging.getLogger(__name__)
+
 
 @csrf_exempt
 def sync(request):
@@ -33,25 +31,27 @@ def sync(request):
         # This _could_ cause timeouts, but might be OK?
         # Will depend on how many line items we get.
         for knack_value in knack_values:
-            log_debug('sent {} to knack'.format(json.dumps(knack_value, indent=4)))
+            logger.info('Knack Sending {}'.format(
+                json.dumps(knack_value, indent=4)))
             order_id = actblue_data['contribution']['orderNumber']
             entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS['lineitems#entityId']
             lineitem_entity_id = knack_value[entity_id_key]
 
-            return_status, result_string = knackload.load(json.dumps(knack_value), knack_object_id)
+            return_status, result_string = knackload.load(
+                json.dumps(knack_value), knack_object_id)
 
             if return_status != 200:
-
-                error_msg = 'Error: We failed to send order {}, lineitem {} to knack'
-                print(error_msg.format(order_id, lineitem_entity_id))
-                log_debug('Error: We failed to send {}'.format(json.dumps(knack_value, indent=4)))
-
+                logger.error('Knack Send Failed', extra={
+                    'order': order_id,
+                    'lineitem': lineitem_entity_id,
+                    'status_code': return_status,
+                })
                 return HttpResponseServerError()
             else:
-                success_msg = 'Success: We sent order {}, lineitem {} to knack'
-                print(success_msg.format(order_id, lineitem_entity_id))
+                logger.info('Knack Send Success: We sent order {}, lineitem {} to knack'.format(
+                    order_id, lineitem_entity_id))
                 result_data = json.loads(result_string)
-                log_debug(json.dumps(result_data, indent=4))
+                logger.info(json.dumps(result_data, indent=4))
 
         return HttpResponse('')
     else:
@@ -151,4 +151,10 @@ def auth(request):
     username = username.decode('utf-8')
     password = password.decode('utf-8')
     # TODO add encryption
-    return username == settings.ACTBLUE_USERNAME and password == settings.ACTBLUE_PASSWORD
+    passes = (username == settings.ACTBLUE_USERNAME and password ==
+              settings.ACTBLUE_PASSWORD)
+    if not passes:
+        logging.warning(
+            'Unauthorized access attempted with username {}'.format(username)
+        )
+    return passes
