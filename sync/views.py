@@ -33,9 +33,17 @@ def sync(request):
         for knack_value in knack_values:
             logger.info('Knack Sending {}'.format(
                 json.dumps(knack_value, indent=4)))
-            order_id = actblue_data['contribution']['orderNumber']
-            entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS['lineitems#entityId']
-            lineitem_entity_id = knack_value[entity_id_key]
+            try:
+                order_id = actblue_data['contribution']['orderNumber']
+            except:
+                logger.warning('ActBlue data warning: contribution#orderNumber not found')
+                order_id = "UNKNOWN"
+            try:
+                entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS['lineitems#entityId']
+                lineitem_entity_id = knack_value[entity_id_key]
+            except:
+                logger.warning('ActBlue data warning: lineitems#entityId not found')
+                lineitem_entity_id = 'UNKNOWN'
 
             return_status, result_string = knackload.load(
                 json.dumps(knack_value), knack_object_id)
@@ -72,9 +80,18 @@ def get_lineitems(actblue_values, mapping):
 
     for lineitem in lineitems:
         knack_lineitem = {}
-        knack_lineitem[amount_key] = lineitem.get('amount')
-        knack_lineitem[entity_key] = lineitem.get('entityId')
-        knack_lineitem[committee_name] = lineitem.get('committeeName')
+        if 'amount' not in lineitem:
+            logger.warning('ActBlue data warning: amount not found')
+        else:
+            knack_lineitem[amount_key] = lineitem.get('amount')
+        if 'entityId' not in lineitem:
+            logger.warning('ActBlue data warning: entityId not found')
+        else:
+            knack_lineitem[entity_key] = lineitem.get('entityId')
+        if 'committeeName' not in lineitem:
+            logger.warning('ActBlue data warning: committeeName not found')
+        else:
+            knack_lineitem[committee_name] = lineitem.get('committeeName')
         knack_lineitems.append(knack_lineitem)
 
     return knack_lineitems
@@ -110,8 +127,11 @@ def transform(actblue_values):
         """
         do string transformations
         """
-        for fkey, fvalue in field_prefixes:
-            knack_lineitem[fkey] = fvalue + knack_lineitem[fkey]
+        try:
+            for fkey, fvalue in field_prefixes:
+                knack_lineitem[fkey] = fvalue + knack_lineitem[fkey]
+        except:
+            logger.warning('ActBlue data warning: Error applying prefix {}'.format(fvalue))
 
     return knack_lineitems
 
@@ -128,9 +148,15 @@ def walk(path, container):
     key = path[0]
     if len(path) == 1:
         if key.isdigit():
-            return container[int(key)]
+            if int(key) in container:
+                return container[int(key)]
+            else:
+                logger.warning('ActBlue data warning: {} not found'.format(key))
         else:
-            return container.get(path[0])
+            if path[0] in container:
+                return container.get(path[0])
+            else:
+                logger.warning('ActBlue data warning: {} not found'.format(path[0]))
     else:
         if key.isdigit():
             new_container = container[int(key)]
