@@ -1,0 +1,48 @@
+{
+  "name": "act-blue-knack",
+  "scripts": {
+  },
+  "env": {
+    "DISABLE_COLLECTSTATIC": {
+      "required": true
+    },
+    "DJANGO_ACTBLUE_PASSWORD": {
+      "required": true
+    },
+    "DJANGO_ACTBLUE_USERNAME": {
+      "required": true
+    },
+    "DJANGO_SECRET_KEY": {
+      "generator": "secret"
+    },
+    "KNACK_API_ID": {
+      "required": true
+    },
+    "KNACK_API_KEY": {
+      "required": true
+    },
+    "KNACK_ENVIRONMENT": {
+      "required": true
+    },
+    "KNACK_OBJECT_ID": {
+      "required": true
+    },
+    "SENTRY_DSN": {
+      "required": true
+    },
+    "SENTRY_ENVIRONMENT": "dev"
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
