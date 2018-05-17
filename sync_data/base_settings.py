@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get(
     ''
 )
 
-ALLOWED_HOSTS = ['arcane-ridge-14075.herokuapp.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', 'localhost']
 
 DEBUG = True
 
