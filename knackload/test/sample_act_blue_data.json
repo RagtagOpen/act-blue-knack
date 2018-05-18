@@ -1,7 +1,7 @@
 {
   "donor": {
-    "firstname": "jane",
-    "lastname": "doe",
+    "firstname": "ESMERELDA",
+    "lastname": "NEWFIELDNAMES",
     "addr1": "1234 Main Street",
     "city": "Chattanooga",
     "state": "TN",
@@ -23,8 +23,8 @@
     "createdAt": "2018-01-24T21:43:36-05:00",
     "orderNumber": "AB12345678",
     "contributionForm": "example-slug",
-    "refcode": null,
-    "refcode2": null,
+    "refcode": "samplerefcode",
+    "refcode2": "samplerefcode",
     "creditCardExpiration": "11/2020",
     "recurringPeriod": "once",
     "recurringDuration": 1,

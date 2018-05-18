@@ -60,7 +60,7 @@ def sync(request):
                 logger.info('Knack Send Success: We sent order {}, lineitem {} to knack'.format(
                     order_id, lineitem_entity_id))
                 result_data = json.loads(result_string)
-                logger.info(json.dumps(result_data, indent=4))
+                logger.debug(json.dumps(result_data, indent=4))
 
         return HttpResponse('')
     else:
