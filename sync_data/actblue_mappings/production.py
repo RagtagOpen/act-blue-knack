@@ -10,7 +10,7 @@ ACTBLUE_TO_KNACK_MAPPING_SCALARS = {
     'donor#zip': 'field_977',  # String, not an int
     'donor#country': 'field_978',
     'donor#email': 'field_979',
-    'donor#phone': 'field_980',  # String, not an int
+    'donor#phone': 'field_986',  # String, not an int
 }
 
 ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS = {
