@@ -24,6 +24,12 @@ def sync(request):
     authorized = auth(request)
     if request.method == 'POST' and authorized:
         actblue_data = json.loads(request.body)
+        try:
+            order_id = actblue_data['contribution']['orderNumber']
+            logger.info("Received order number {} from ActBlue".format(order_id))
+        except:
+            order_id = "UNKNOWN"
+            logger.warning("ActBlue data warning: contribution#orderNumber not found")
         knack_values = transform(actblue_data)
         knack_object_id = settings.KNACK_OBJECT_ID
 
@@ -31,13 +37,8 @@ def sync(request):
         # This _could_ cause timeouts, but might be OK?
         # Will depend on how many line items we get.
         for knack_value in knack_values:
-            logger.info('Knack Sending {}'.format(
+            logger.debug('Knack Sending {}'.format(
                 json.dumps(knack_value, indent=4)))
-            try:
-                order_id = actblue_data['contribution']['orderNumber']
-            except:
-                logger.warning('ActBlue data warning: contribution#orderNumber not found')
-                order_id = "UNKNOWN"
             try:
                 entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS['lineitems#entityId']
                 lineitem_entity_id = knack_value[entity_id_key]
