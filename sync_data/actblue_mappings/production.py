@@ -1,7 +1,7 @@
 ACTBLUE_TO_KNACK_MAPPING_SCALARS = {
     'contribution#createdAt': 'field_969',
-    'contribution#contributionForm': ['field_982', 'field_983'],
-    'contribution#refcode': 'field_968',
+    'contribution#contributionForm': ['field_982', 'field_988'],
+    'contribution#refcode': 'field_987',
     'donor#firstname': 'field_972',
     'donor#lastname': 'field_973',
     'donor#addr1': 'field_974',
@@ -9,7 +9,7 @@ ACTBLUE_TO_KNACK_MAPPING_SCALARS = {
     'donor#state': 'field_976',
     'donor#zip': 'field_977',  # String, not an int
     'donor#country': 'field_978',
-    'donor#email': 'field_979',
+    'donor#email': 'field_984',
     'donor#phone': 'field_986',  # String, not an int
 }
 
