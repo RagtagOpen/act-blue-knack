@@ -5,6 +5,9 @@ import base64
 import json
 import logging
 
+from pytz import timezone
+from dateutil import parser
+
 from django.conf import settings
 from django.http import (HttpResponse, HttpResponseForbidden,
                          HttpResponseServerError)
@@ -109,11 +112,13 @@ def transform(actblue_values):
         scalar_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_SCALARS.iteritems()
         array_items_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS
         field_prefixes = settings.FIELD_PREFIXES.iteritems()
+        timezone_conversions_needed = settings.TIMEZONE_CONVERSION_NEEDED
     except AttributeError:
         # this works in Python 3, and returns an generator like iteritems in Python 2
         scalar_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_SCALARS.items()
         array_items_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS
         field_prefixes = settings.FIELD_PREFIXES.items()
+        timezone_conversions_needed = settings.TIMEZONE_CONVERSION_NEEDED
     for key, value in scalar_mapping:
         path = key.split('#')
         if isinstance(value, list):
@@ -134,6 +139,15 @@ def transform(actblue_values):
         except:
             logger.warning('ActBlue data warning: Error applying prefix {}'.format(fvalue))
 
+        """
+        do timezone conversions
+        """
+        try:
+            for fkey in timezone_conversions_needed:
+                aware_datetime = parser.parse(knack_lineitem[fkey])
+                knack_lineitem[fkey] = aware_datetime.astimezone(timezone('America/Los_Angeles')).isoformat()
+        except:
+            continue
     return knack_lineitems
 
 

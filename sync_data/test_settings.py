@@ -1,7 +1,8 @@
 from .actblue_mappings.testing import (ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS,
                                        ACTBLUE_TO_KNACK_MAPPING_SCALARS,
                                        KNACK_OBJECT_ID,
-                                       FIELD_PREFIXES
+                                       FIELD_PREFIXES,
+                                       TIMEZONE_CONVERSION_NEEDED
                                        )
 from .base_settings import *
 

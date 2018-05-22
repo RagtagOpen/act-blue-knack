@@ -24,6 +24,7 @@ traitlets = "==4.3.2"
 wcwidth = "==0.1.7"
 requests = "*"
 raven = "*"
+python-dateutil = "*"
 
 [dev-packages]
 

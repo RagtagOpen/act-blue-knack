@@ -24,3 +24,5 @@ KNACK_OBJECT_ID = '41'
 FIELD_PREFIXES = {
     'field_893': 'https:/secure.actblue.com/donate/'
 }
+
+TIMEZONE_CONVERSION_NEEDED = ['field_888']
