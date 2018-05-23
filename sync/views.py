@@ -5,14 +5,13 @@ import base64
 import json
 import logging
 
-from pytz import timezone
 from dateutil import parser
-
 from django.conf import settings
 from django.http import (HttpResponse, HttpResponseForbidden,
                          HttpResponseServerError)
 from django.views.decorators.csrf import csrf_exempt
 from knackload import knackload
+from pytz import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -29,10 +28,12 @@ def sync(request):
         actblue_data = json.loads(request.body)
         try:
             order_id = actblue_data['contribution']['orderNumber']
-            logger.info("Received order number {} from ActBlue".format(order_id))
-        except:
+            logger.info(
+                "Received order number {} from ActBlue".format(order_id))
+        except Exception:
             order_id = "UNKNOWN"
-            logger.warning("ActBlue data warning: contribution#orderNumber not found")
+            logger.warning(
+                "ActBlue data warning: contribution#orderNumber not found")
         knack_values = transform(actblue_data)
         knack_object_id = settings.KNACK_OBJECT_ID
 
@@ -45,8 +46,9 @@ def sync(request):
             try:
                 entity_id_key = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS['lineitems#entityId']
                 lineitem_entity_id = knack_value[entity_id_key]
-            except:
-                logger.warning('ActBlue data warning: lineitems#entityId not found')
+            except Exception:
+                logger.warning(
+                    'ActBlue data warning: lineitems#entityId not found')
                 lineitem_entity_id = 'UNKNOWN'
 
             return_status, result_string = knackload.load(
@@ -136,8 +138,9 @@ def transform(actblue_values):
         try:
             for fkey, fvalue in field_prefixes:
                 knack_lineitem[fkey] = fvalue + knack_lineitem[fkey]
-        except:
-            logger.warning('ActBlue data warning: Error applying prefix {}'.format(fvalue))
+        except Exception:
+            logger.warning(
+                'ActBlue data warning: Error applying prefix {}'.format(fvalue))
 
         """
         do timezone conversions
@@ -145,8 +148,9 @@ def transform(actblue_values):
         try:
             for fkey in timezone_conversions_needed:
                 aware_datetime = parser.parse(knack_lineitem[fkey])
-                knack_lineitem[fkey] = aware_datetime.astimezone(timezone('America/Los_Angeles')).isoformat()
-        except:
+                knack_lineitem[fkey] = aware_datetime.astimezone(
+                    timezone('America/Los_Angeles')).isoformat()
+        except Exception:
             continue
     return knack_lineitems
 
@@ -166,12 +170,14 @@ def walk(path, container):
             if int(key) in container:
                 return container[int(key)]
             else:
-                logger.warning('ActBlue data warning: {} not found'.format(key))
+                logger.warning(
+                    'ActBlue data warning: {} not found'.format(key))
         else:
             if path[0] in container:
                 return container.get(path[0])
             else:
-                logger.warning('ActBlue data warning: {} not found'.format(path[0]))
+                logger.warning(
+                    'ActBlue data warning: {} not found'.format(path[0]))
     else:
         if key.isdigit():
             new_container = container[int(key)]
