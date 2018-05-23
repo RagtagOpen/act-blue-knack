@@ -149,7 +149,7 @@ def transform(actblue_values):
             for fkey in timezone_conversions_needed:
                 aware_datetime = parser.parse(knack_lineitem[fkey])
                 knack_lineitem[fkey] = aware_datetime.astimezone(
-                    timezone('America/Los_Angeles')).isoformat()
+                    timezone('America/Los_Angeles')).replace(tzinfo=None).isoformat()
         except Exception:
             continue
     return knack_lineitems
