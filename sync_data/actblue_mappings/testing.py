@@ -1,5 +1,4 @@
 ACTBLUE_TO_KNACK_MAPPING_SCALARS = {
-    'contribution#createdAt': 'field_888',
     'contribution#contributionForm': ['field_893', 'field_922'],
     'contribution#refcode': 'field_896',
     'donor#firstname': 'field_897',
@@ -14,6 +13,7 @@ ACTBLUE_TO_KNACK_MAPPING_SCALARS = {
 }
 
 ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS = {
+    'lineitems#paidAt': 'field_888',
     'lineitems#entityId': 'field_935',
     'lineitems#amount': 'field_889',
     'lineitems#committeeName': 'field_892',
@@ -22,7 +22,7 @@ ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS = {
 KNACK_OBJECT_ID = '41'
 
 FIELD_PREFIXES = {
-    'field_893': 'https:/secure.actblue.com/donate/'
+    'field_893': 'https://secure.actblue.com/donate/'
 }
 
 TIMEZONE_CONVERSION_NEEDED = ['field_888']

@@ -83,6 +83,7 @@ def get_lineitems(actblue_values, mapping):
     amount_key = mapping['lineitems#amount']
     entity_key = mapping['lineitems#entityId']
     committee_name = mapping['lineitems#committeeName']
+    paid_at_data = mapping['lineitems#paidAt']
 
     for lineitem in lineitems:
         knack_lineitem = {}
@@ -98,6 +99,10 @@ def get_lineitems(actblue_values, mapping):
             logger.warning('ActBlue data warning: committeeName not found')
         else:
             knack_lineitem[committee_name] = lineitem.get('committeeName')
+        if 'paidAt' not in lineitem:
+            logger.warning('ActBlue data warning: paidAt not found')
+        else:
+            knack_lineitem[paid_at_data] = lineitem.get('paidAt')
         knack_lineitems.append(knack_lineitem)
 
     return knack_lineitems
