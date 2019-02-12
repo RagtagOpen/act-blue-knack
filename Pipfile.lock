@@ -56,11 +56,11 @@
         },
         "django": {
             "hashes": [
-                "sha256:73cca1dac154e749b39cc91a54dc876109eb0512a5c6804986495305047066a5",
-                "sha256:7ee7d93d407f082e3849c8d10da50ff5b488af37ed1b0066a22dee5f2709ed16"
+                "sha256:0a73696e0ac71ee6177103df984f9c1e07cd297f080f8ec4dc7c6f3fb74395b5",
+                "sha256:43a99da08fee329480d27860d68279945b7d8bf7b537388ee2c8938c709b2041"
             ],
             "index": "pypi",
-            "version": "==1.11.18"
+            "version": "==1.11.20"
         },
         "enum34": {
             "hashes": [
@@ -145,11 +145,11 @@
         },
         "python-dateutil": {
             "hashes": [
-                "sha256:063df5763652e21de43de7d9e00ccf239f953a832941e37be541614732cdfc93",
-                "sha256:88f9287c0174266bb0d8cedd395cfba9c58e87e5ad86b2ce58859bc11be3cf02"
+                "sha256:7e6584c74aeed623791615e26efd690f29817a27c73085b78e4bad02493df2fb",
+                "sha256:c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e"
             ],
             "index": "pypi",
-            "version": "==2.7.5"
+            "version": "==2.8.0"
         },
         "pytz": {
             "hashes": [
