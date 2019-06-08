@@ -126,6 +126,9 @@ def transform(actblue_values):
         array_items_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS
         field_prefixes = settings.FIELD_PREFIXES.items()
         timezone_conversions_needed = settings.TIMEZONE_CONVERSION_NEEDED
+
+    knack_required_fields = settings.KNACK_DONOR_REQUIRED_FIELDS
+
     for key, value in scalar_mapping:
         path = key.split('#')
         if isinstance(value, list):
@@ -157,6 +160,14 @@ def transform(actblue_values):
                     timezone('America/Los_Angeles')).replace(tzinfo=None).isoformat()
         except Exception:
             continue
+
+        """
+        check for required fields
+        """
+        for fkey in knack_required_fields:
+            if fkey not in knack_lineitem:
+                logger.warning(
+                    'ActBlue data warning: {} not found'.format(fkey))
     return knack_lineitems
 
 
@@ -174,15 +185,9 @@ def walk(path, container):
         if key.isdigit():
             if int(key) in container:
                 return container[int(key)]
-            else:
-                logger.warning(
-                    'ActBlue data warning: {} not found'.format(key))
         else:
             if path[0] in container:
                 return container.get(path[0])
-            else:
-                logger.warning(
-                    'ActBlue data warning: {} not found'.format(path[0]))
     else:
         if key.isdigit():
             new_container = container[int(key)]

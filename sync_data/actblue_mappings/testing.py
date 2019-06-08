@@ -19,6 +19,16 @@ ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS = {
     'lineitems#committeeName': 'field_892',
 }
 
+KNACK_DONOR_REQUIRED_FIELDS = [
+    'field_897', # first name
+    'field_898', # last name
+    'field_899', # addr1
+    'field_901', # city
+    'field_902', # state
+    'field_903', # zip
+    'field_904', # country
+]
+
 KNACK_OBJECT_ID = '41'
 
 FIELD_PREFIXES = {
