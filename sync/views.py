@@ -162,10 +162,10 @@ def transform(actblue_values):
             continue
 
         """
-        check for required fields
+        check for required fields. Figure out ActBlue mapping by looking in sync_data/actblue_mappings/
         """
         for fkey in knack_required_fields:
-            if fkey not in knack_lineitem:
+            if fkey not in knack_lineitem or not knack_lineitem[fkey]:
                 logger.warning(
                     'ActBlue data warning: {} not found'.format(fkey))
     return knack_lineitems

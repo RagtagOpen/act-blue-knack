@@ -1,0 +1,61 @@
+{
+  "donor": {
+    "firstname": "PIPPA",
+    "lastname": "PRIVACY_ORIENTED",
+    "addr1": "1234 Main Street",
+    "city": "Chattanooga",
+    "state": "TN",
+    "zip": "30709",
+    "country": "United States",
+    "isEligibleForExpressLane": true,
+    "employerData": {
+      "employer": "Ragtag",
+      "occupation": "Awesome Volunteer",
+      "employerAddr1": null,
+      "employerCity": null,
+      "employerState": null,
+      "employerCountry": null
+    }
+  },
+  "contribution": {
+    "createdAt": "2018-01-24T21:43:36-05:00",
+    "orderNumber": "AB12345678",
+    "contributionForm": "example-slug",
+    "refcode": "sample ref code",
+    "refcode2": "sample ref code 2",
+    "creditCardExpiration": "11/2020",
+    "recurringPeriod": "once",
+    "recurringDuration": 1,
+    "abTestName": null,
+    "isRecurring": false,
+    "isPaypal": false,
+    "isMobile": true,
+    "abTestVariation": null,
+    "isExpress": true,
+    "withExpressLane": false,
+    "expressSignup": false,
+    "uniqueIdentifier": "5e829b71-9968-48e2-a824-8a4de908e61f",
+    "status": "approved",
+    "thanksUrl": "https://secure.actblue.com/contribute/thanks/AB12345678?k=9f59dfbe&success=true"
+  },
+  "lineitems": [
+    {
+      "sequence": 0,
+      "entityId": 12345,
+      "fecId": null,
+      "committeeName": "Example Committee",
+      "amount": "1000.0",
+      "paidAt": "2018-01-24T21:43:44-05:00",
+      "lineitemId": 123456789
+    },
+    {
+      "sequence": 0,
+      "entityId": 123456,
+      "fecId": null,
+      "committeeName": "Second Example Committee",
+      "amount": "10.0",
+      "paidAt": "2018-01-25T21:43:44-05:00",
+      "lineitemId": 123456
+    }
+  ]
+}

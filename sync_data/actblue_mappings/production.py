@@ -20,13 +20,13 @@ ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS = {
 }
 
 KNACK_DONOR_REQUIRED_FIELDS = [
-    'field_897', # first name
-    'field_898', # last name
-    'field_899', # addr1
-    'field_901', # city
-    'field_902', # state
-    'field_903', # zip
-    'field_904', # country
+    'field_972', # first name
+    'field_973', # last name
+    'field_974', # addr1
+    'field_975', # city
+    'field_976', # state
+    'field_977', # zip
+    'field_978', # country
 ]
 
 KNACK_OBJECT_ID = '42'
