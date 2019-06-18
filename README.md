@@ -38,3 +38,7 @@ Heroku, you can update `/sync_data/wsgi.py`.
 You can copy `sample.env` to `.env` in your local copy to set these
 environment variables to sensible defaults for local development.
 Running `pipenv shell` will automatically load them into your shell.
+
+## Build status
+
+[![CircleCI](https://circleci.com/gh/RagtagOpen/act-blue-knack/tree/master.svg?style=svg)](https://circleci.com/gh/RagtagOpen/act-blue-knack/tree/master)
