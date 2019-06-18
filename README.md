@@ -1,4 +1,5 @@
 # act-blue-knack
+
 Synchronization of ActBlue donation data with a Knack data store
 
 # Details
@@ -33,3 +34,7 @@ environments can be put in `/sync_data/settings.py` and
 `sync_data/test_settings.py` respectively. By default, the app will use
 `sync_data.settings.py` -- to change this when the app is deployed to
 Heroku, you can update `/sync_data/wsgi.py`.
+
+You can copy `sample.env` to `.env` in your local copy to set these
+environment variables to sensible defaults for local development.
+Running `pipenv shell` will automatically load them into your shell.
