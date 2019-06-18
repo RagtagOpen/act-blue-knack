@@ -2,7 +2,7 @@
 
 Synchronization of ActBlue donation data with a Knack data store
 
-# Details
+## Details
 
 This project sets up an endpoint to process ActBlue donation webhooks,
 as documented [here](https://secure.actblue.com/docs/webhooks). The
@@ -10,7 +10,7 @@ details mapping what ActBlue fields should go to which Knack fields
 are kept under `/sync_data/actblue_mappings/`. The desired fields as
 well as their mappings to Knack were provided by Sister District.
 
-# Devlopment and Deploying
+## Development and Deploying
 
 This project is primarily written in Django and setup to be deployed
 to Heroku. If you're unfamiliar with Django, the
