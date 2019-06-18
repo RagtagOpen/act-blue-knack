@@ -7,11 +7,11 @@ import logging
 
 from dateutil import parser
 from django.conf import settings
-from django.http import (HttpResponse, HttpResponseForbidden,
-                         HttpResponseServerError)
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseServerError
 from django.views.decorators.csrf import csrf_exempt
-from knackload import knackload
 from pytz import timezone
+
+from knackload import knackload
 
 logger = logging.getLogger(__name__)
 
@@ -126,6 +126,9 @@ def transform(actblue_values):
         array_items_mapping = settings.ACTBLUE_TO_KNACK_MAPPING_ARRAY_ITEMS
         field_prefixes = settings.FIELD_PREFIXES.items()
         timezone_conversions_needed = settings.TIMEZONE_CONVERSION_NEEDED
+
+    knack_required_fields = settings.KNACK_DONOR_REQUIRED_FIELDS
+
     for key, value in scalar_mapping:
         path = key.split('#')
         if isinstance(value, list):
@@ -157,6 +160,14 @@ def transform(actblue_values):
                     timezone('America/Los_Angeles')).replace(tzinfo=None).isoformat()
         except Exception:
             continue
+
+        """
+        check for required fields. Figure out ActBlue mapping by looking in sync_data/actblue_mappings/
+        """
+        for fkey in knack_required_fields:
+            if fkey not in knack_lineitem or not knack_lineitem[fkey]:
+                logger.warning(
+                    'ActBlue data warning: {} not found'.format(knack_required_fields[fkey]))
     return knack_lineitems
 
 
@@ -174,15 +185,9 @@ def walk(path, container):
         if key.isdigit():
             if int(key) in container:
                 return container[int(key)]
-            else:
-                logger.warning(
-                    'ActBlue data warning: {} not found'.format(key))
         else:
             if path[0] in container:
                 return container.get(path[0])
-            else:
-                logger.warning(
-                    'ActBlue data warning: {} not found'.format(path[0]))
     else:
         if key.isdigit():
             new_container = container[int(key)]
@@ -197,7 +202,12 @@ def auth(request):
 
     Returns a boolean.
     """
-    auth_header = request.META['HTTP_AUTHORIZATION']
+    auth_header = request.META.get('HTTP_AUTHORIZATION')
+    if not auth_header or len(auth_header.split(' ')) < 2:
+        logger.warning(
+            'Unauthorized access attempted with no authorization header'
+        )
+        return False 
     encoded = auth_header.split(' ')[1].encode('ascii')
     username, password = base64.urlsafe_b64decode(encoded).split(b':')
     username = username.decode('utf-8')
@@ -206,7 +216,7 @@ def auth(request):
     passes = (username == settings.ACTBLUE_USERNAME and password ==
               settings.ACTBLUE_PASSWORD)
     if not passes:
-        logging.warning(
+        logger.warning(
             'Unauthorized access attempted with username {}'.format(username)
         )
     return passes

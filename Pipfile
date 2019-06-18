@@ -27,6 +27,10 @@ raven = "*"
 python-dateutil = "*"
 
 [dev-packages]
+pep8 = "*"
+black = "==19.3b0"
+ipython = "==6.5.0"
+pytest = "*"
 
 [requires]
 python_version = "3.6"
