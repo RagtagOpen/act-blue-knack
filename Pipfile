@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-appnope = "==0.1.0"
+appnope = "*"
 "backports.shutil_get_terminal_size" = "==1.0.0"
 decorator = "==4.2.1"
 Django = "<=2.*"
