@@ -38,9 +38,9 @@ jobs:
       - run:
           name: Run Knackload Tests
           command: |
-            pytest
+            pipenv run pytest
 
       - run:
           name: Run Django Tests
           command: |
-            python manage.py test -v 2
+            pipenv run python manage.py test -v 2
