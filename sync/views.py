@@ -7,11 +7,11 @@ import logging
 
 from dateutil import parser
 from django.conf import settings
-from django.http import (HttpResponse, HttpResponseForbidden,
-                         HttpResponseServerError)
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseServerError
 from django.views.decorators.csrf import csrf_exempt
-from knackload import knackload
 from pytz import timezone
+
+from knackload import knackload
 
 logger = logging.getLogger(__name__)
 
