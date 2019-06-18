@@ -202,7 +202,12 @@ def auth(request):
 
     Returns a boolean.
     """
-    auth_header = request.META['HTTP_AUTHORIZATION']
+    auth_header = request.META.get('HTTP_AUTHORIZATION')
+    if not auth_header or len(auth_header.split(' ')) < 2:
+        logger.warning(
+            'Unauthorized access attempted with no authorization header'
+        )
+        return False 
     encoded = auth_header.split(' ')[1].encode('ascii')
     username, password = base64.urlsafe_b64decode(encoded).split(b':')
     username = username.decode('utf-8')
@@ -211,7 +216,7 @@ def auth(request):
     passes = (username == settings.ACTBLUE_USERNAME and password ==
               settings.ACTBLUE_PASSWORD)
     if not passes:
-        logging.warning(
+        logger.warning(
             'Unauthorized access attempted with username {}'.format(username)
         )
     return passes
