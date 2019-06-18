@@ -167,7 +167,7 @@ def transform(actblue_values):
         for fkey in knack_required_fields:
             if fkey not in knack_lineitem or not knack_lineitem[fkey]:
                 logger.warning(
-                    'ActBlue data warning: {} not found'.format(fkey))
+                    'ActBlue data warning: {} not found'.format(knack_required_fields[fkey]))
     return knack_lineitems
 
 
