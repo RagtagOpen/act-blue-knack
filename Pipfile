@@ -27,6 +27,8 @@ raven = "*"
 python-dateutil = "*"
 
 [dev-packages]
+pep8 = "*"
+black = "==19.3b0"
 
 [requires]
 python_version = "3.6"
