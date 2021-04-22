@@ -9,6 +9,7 @@ gunicorn = "*"
 requests = "*"
 raven = "*"
 python-dateutil = "*"
+pygments = ">=2.7.3" # pinning pygments to >= 2.7.3 for CVE-2021-20270
 
 [dev-packages]
 pep8 = "*"
